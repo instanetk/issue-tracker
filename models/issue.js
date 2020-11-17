@@ -2,42 +2,48 @@ const mongoose = require("mongoose");
 const Joi = require("joi");
 
 const issueSchema = new mongoose.Schema({
-  title: {
+  project: {
     type: String,
     required: true,
     minlength: 3,
     maxlength: 255,
   },
-  text: {
+  issue_title: {
+    type: String,
+    required: true,
+    minlength: 3,
+    maxlength: 255,
+  },
+  issue_text: {
     type: String,
     required: true,
     minlength: 3,
     maxlength: 1000,
   },
-  createdBy: {
+  created_by: {
     type: String,
     required: true,
     minlength: 2,
     maxlength: 255,
   },
-  assignedTo: {
+  assigned_to: {
     type: String,
-    required: true,
-    minlength: 2,
+    required: false,
+    minlength: 0,
     maxlength: 255,
   },
-  status: {
+  status_text: {
     type: String,
-    required: true,
-    minlength: 2,
+    required: false,
+    minlength: 0,
     maxlength: 255,
   },
-  createdOn: {
+  created_on: {
     type: Date,
     required: true,
     default: Date.now(),
   },
-  updatedOn: {
+  updated_on: {
     type: Date,
     required: false,
   },
@@ -55,8 +61,8 @@ function validateIssue(issue) {
     title: Joi.string().min(3).max(255).required(),
     text: Joi.string().min(3).max(1000).required(),
     createdBy: Joi.string().min(3).max(255).required(),
-    assignedTo: Joi.string().min(3).max(255).required(),
-    status: Joi.string().min(2).max(255).required(),
+    assignedTo: Joi.string().min(0).max(255),
+    status: Joi.string().min(0).max(255),
     createdOn: Joi.date().required(),
     updatedOn: Joi.date(),
     open: Joi.boolean().required(),
