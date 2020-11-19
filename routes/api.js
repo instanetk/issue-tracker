@@ -122,7 +122,8 @@ module.exports = function (app) {
           // Update dabatase
           const update = await issues.save();
         }
-        res.json("updated successfully");
+
+        res.json({ result: "successfully updated", _id: id });
       } catch (ex) {
         console.log(ex.message);
       }
