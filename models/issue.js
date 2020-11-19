@@ -46,6 +46,7 @@ const issueSchema = new mongoose.Schema({
   updated_on: {
     type: Date,
     required: false,
+    default: null,
   },
   open: {
     type: Boolean,

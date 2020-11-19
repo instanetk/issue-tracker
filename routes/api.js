@@ -85,11 +85,61 @@ module.exports = function (app) {
       }
     })
 
-    .put(function (req, res) {
-      var project = req.params.project;
+    .put(async function (req, res) {
+      // Copy req.body and delete _id field
+      const payload = { ...req.body };
+      delete payload._id;
+
+      // Check if payload object content is null or empty strings
+      function checkProperties(obj) {
+        for (let key in obj) {
+          if (obj[key] !== null && obj[key] != "") return false;
+        }
+        return true;
+      }
+
+      let nofields = checkProperties(payload);
+      if (nofields) return res.json("no updated field sent");
+
+      // Proceed to update object values
+      try {
+        // Retrieve entry from database
+        let id = req.body._id;
+        let issues = await Issue.findById({ _id: id });
+        if (!issues) return res.json("could not update " + id);
+
+        // Check client's object and update included fields
+        for (let key of Object.keys(payload)) {
+          if (req.body[key] !== "") {
+            issues[key] = req.body[key];
+          } else {
+            issues[key] = issues[key];
+          }
+          // Write the updated date and check for issue open status
+          issues.updated_on = Date.now();
+          issues.open = req.body.open || true;
+          // Update dabatase
+          const update = await issues.save();
+        }
+        res.json("updated successfully");
+      } catch (ex) {
+        console.log(ex.message);
+      }
     })
 
-    .delete(function (req, res) {
-      var project = req.params.project;
+    .delete(async function (req, res) {
+      let id = req.body._id;
+      let valid = mongoose.isValidObjectId(id);
+      if (!valid) return res.status(200).json("_id error");
+
+      try {
+        const issue = await Issue.deleteOne({ _id: id });
+        if (issue.deletedCount === 0)
+          return res.status(200).json("could not delete " + id);
+
+        res.status(200).json("deleted " + id);
+      } catch (ex) {
+        console.log(ex.message);
+      }
     });
 };
