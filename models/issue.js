@@ -59,14 +59,14 @@ const Issue = mongoose.model("Issue", issueSchema);
 
 function validateIssue(issue) {
   const schema = Joi.object({
-    title: Joi.string().min(3).max(255).required(),
-    text: Joi.string().min(3).max(1000).required(),
-    createdBy: Joi.string().min(3).max(255).required(),
-    assignedTo: Joi.string().min(0).max(255),
-    status: Joi.string().min(0).max(255),
-    createdOn: Joi.date().required(),
-    updatedOn: Joi.date(),
-    open: Joi.boolean().required(),
+    issue_title: Joi.string().min(3).max(255).required(),
+    issue_text: Joi.string().min(3).max(1000).required(),
+    created_by: Joi.string().min(3).max(255).required(),
+    assigned_to: Joi.string().min(0).max(255),
+    status_text: Joi.string().min(0).max(255),
+    created_on: Joi.date(),
+    updated_on: Joi.date(),
+    open: Joi.boolean(),
   });
   return schema.validate(issue);
 }

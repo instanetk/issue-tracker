@@ -70,8 +70,8 @@ module.exports = function (app) {
         issue_title: req.body.issue_title,
         issue_text: req.body.issue_text,
         created_by: req.body.created_by,
-        assigned_to: req.body.assigned_to,
-        status_text: req.body.status_text,
+        assigned_to: req.body.assigned_to || "",
+        status_text: req.body.status_text || "",
       };
 
       console.log(req.body, entry);
@@ -79,6 +79,7 @@ module.exports = function (app) {
       try {
         const issue = new Issue(entry);
         await issue.save();
+        res.status(200).json(issue);
       } catch (ex) {
         console.log(ex.message);
         res.status(400).send(ex.message);
