@@ -51,7 +51,7 @@ module.exports = function (app) {
           result.push(obj);
         });
 
-        console.log(result, issues);
+        console.log(result);
 
         res.send(result);
       } catch (ex) {
