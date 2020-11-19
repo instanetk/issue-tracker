@@ -61,7 +61,7 @@ module.exports = function (app) {
 
     .post(async function (req, res) {
       const { error } = validate(req.body);
-      if (error) res.status(400).send(error.details[0].message);
+      if (error) res.status(200).send({ error: "required field(s) missing" });
 
       var project = req.params.project;
 
