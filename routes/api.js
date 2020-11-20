@@ -103,13 +103,13 @@ module.exports = function (app) {
 
       let nofields = checkProperties(payload);
       if (nofields)
-        return res.json({ error: "no update field(s) sent", _id: _id });
+        return res.json({ error: "no update field(s) sent", _id: id });
 
       // Proceed to update object values
       try {
         // Retrieve entry from database
         let issues = await Issue.findById({ _id: id });
-        if (!issues) return res.json({ error: "missing _id" });
+        if (!issues) return res.json({ error: "could not update ", _id: id });
 
         // Check client's object and update included fields
         for (let key of Object.keys(payload)) {
