@@ -133,14 +133,14 @@ module.exports = function (app) {
     .delete(async function (req, res) {
       let id = req.body._id;
       let valid = mongoose.isValidObjectId(id);
-      if (!valid) return res.status(200).json("_id error");
+      if (!valid) return res.status(200).json({ error: "missing _id" });
 
       try {
         const issue = await Issue.deleteOne({ _id: id });
         if (issue.deletedCount === 0)
-          return res.status(200).json("could not delete " + id);
+          return res.status(200).json({ error: "could not delete", _id: _id });
 
-        res.status(200).json("deleted " + id);
+        res.status(200).json({ result: "successfully deleted", _id: _id });
       } catch (ex) {
         console.log(ex.message);
       }
