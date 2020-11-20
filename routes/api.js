@@ -138,9 +138,9 @@ module.exports = function (app) {
       try {
         const issue = await Issue.deleteOne({ _id: id });
         if (issue.deletedCount === 0)
-          return res.status(200).json({ error: "could not delete", _id: _id });
+          return res.status(200).json({ error: "could not delete", _id: id });
 
-        res.status(200).json({ result: "successfully deleted", _id: _id });
+        res.status(200).json({ result: "successfully deleted", _id: id });
       } catch (ex) {
         console.log(ex.message);
       }
