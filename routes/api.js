@@ -13,6 +13,7 @@ var expect = require("chai").expect;
 // var ObjectId = require("mongodb").ObjectID;
 const mongoose = require("mongoose");
 const { Issue, validate } = require("../models/issue");
+var ObjectID = require("mongodb").ObjectID;
 
 // const CONNECTION_STRING = process.env.DB; //MongoClient.connect(CONNECTION_STRING, function(err, db) {});
 
@@ -53,13 +54,14 @@ module.exports = function (app) {
 
         res.send(result);
       } catch (ex) {
-        console.log(ex.message);
+        console.log("ex 1", ex.message);
       }
     })
 
     .post(async function (req, res) {
       const { error } = validate(req.body);
-      if (error) res.status(200).send({ error: "required field(s) missing" });
+      if (error)
+        return res.status(200).send({ error: "required field(s) missing" });
 
       var project = req.params.project;
 
@@ -77,15 +79,13 @@ module.exports = function (app) {
         await issue.save();
         res.status(200).json(issue);
       } catch (ex) {
-        console.log(ex.message);
-        res.status(400).send(ex.message);
+        console.log(req.body);
+        console.log("ex 2", ex.message);
       }
     })
 
     .put(async function (req, res) {
-      console.log("request", req.body);
       let id = req.body._id;
-      console.log("_id", id);
       if (!id) return res.json({ error: "missing _id" });
       // Copy req.body and delete _id field
       const payload = { ...req.body };
@@ -100,7 +100,6 @@ module.exports = function (app) {
       }
 
       let nofields = checkProperties(payload);
-      console.log("nofields", nofields);
       if (nofields)
         return res.send({ error: "no update field(s) sent", _id: id });
 
@@ -108,7 +107,7 @@ module.exports = function (app) {
       try {
         // Retrieve entry from database
         let issues = await Issue.findById({ _id: id });
-        if (!issues) return res.json({ error: "could not update ", _id: id });
+        if (!issues) return res.json({ error: "could not update", _id: id });
 
         // Check client's object and update included fields
         for (let key of Object.keys(payload)) {
@@ -126,23 +125,23 @@ module.exports = function (app) {
 
         res.json({ result: "successfully updated", _id: id });
       } catch (ex) {
-        console.log(ex.message);
+        console.log("ex 3", ex.message);
       }
     })
 
     .delete(async function (req, res) {
       let id = req.body._id;
-      let valid = mongoose.isValidObjectId(id);
+      let valid = ObjectID.isValid(id);
       if (!valid) return res.status(200).json({ error: "missing _id" });
 
       try {
-        const issue = await Issue.deleteOne({ _id: id });
+        const issue = await Issue.deleteOne(req.body);
         if (issue.deletedCount === 0)
           return res.status(200).json({ error: "could not delete", _id: id });
 
         res.status(200).json({ result: "successfully deleted", _id: id });
       } catch (ex) {
-        console.log(ex.message);
+        console.log("ex 4", ex.message);
       }
     });
 };
