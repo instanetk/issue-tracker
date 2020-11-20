@@ -51,8 +51,6 @@ module.exports = function (app) {
           result.push(obj);
         });
 
-        console.log(result);
-
         res.send(result);
       } catch (ex) {
         console.log(ex.message);
@@ -74,8 +72,6 @@ module.exports = function (app) {
         status_text: req.body.status_text || "",
       };
 
-      console.log(req.body, entry);
-
       try {
         const issue = new Issue(entry);
         await issue.save();
@@ -87,7 +83,9 @@ module.exports = function (app) {
     })
 
     .put(async function (req, res) {
+      console.log("request", req.body);
       let id = req.body._id;
+      console.log("_id", id);
       if (!id) return res.json({ error: "missing _id" });
       // Copy req.body and delete _id field
       const payload = { ...req.body };
@@ -102,8 +100,9 @@ module.exports = function (app) {
       }
 
       let nofields = checkProperties(payload);
+      console.log("nofields", nofields);
       if (nofields)
-        return res.json({ error: "no update field(s) sent", _id: id });
+        return res.send({ error: "no update field(s) sent", _id: id });
 
       // Proceed to update object values
       try {
