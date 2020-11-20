@@ -87,6 +87,8 @@ module.exports = function (app) {
     })
 
     .put(async function (req, res) {
+      let id = req.body._id;
+      if (!id) return res.json({ error: "missing _id" });
       // Copy req.body and delete _id field
       const payload = { ...req.body };
       delete payload._id;
@@ -106,9 +108,8 @@ module.exports = function (app) {
       // Proceed to update object values
       try {
         // Retrieve entry from database
-        let id = req.body._id;
-        if (id === "") return res.json({ error: "missing _id" });
         let issues = await Issue.findById({ _id: id });
+        if (!issues) return res.json({ error: "missing _id" });
 
         // Check client's object and update included fields
         for (let key of Object.keys(payload)) {
