@@ -107,8 +107,8 @@ module.exports = function (app) {
       try {
         // Retrieve entry from database
         let id = req.body._id;
+        if (id === "") return res.json({ error: "missing _id" });
         let issues = await Issue.findById({ _id: id });
-        if (!issues) return res.json({ error: "missing _id" });
 
         // Check client's object and update included fields
         for (let key of Object.keys(payload)) {
