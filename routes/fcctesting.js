@@ -64,7 +64,7 @@ module.exports = function (app) {
     "/_api/get-tests",
     cors(),
     function (req, res, next) {
-      console.log(error);
+      console.log("error", error);
       if (!error && process.env.NODE_ENV === "test") return next();
       res.json({ status: "unavailable" });
     },
@@ -73,20 +73,20 @@ module.exports = function (app) {
       res.json(testFilter(runner.report, req.query.type, req.query.n));
 
       // Overpass freecodecamp outdated tests
-      runner.report.push(
-        {
-          status: "passed",
-          assertions: [{ method: "equal", args: ["res.status", "200"] }],
-        },
-        {
-          status: "passed",
-          assertions: [{ method: "equal", args: ["res.status", "200"] }],
-        },
-        {
-          status: "passed",
-          assertions: [{ method: "equal", args: ["res.status", "200"] }],
-        }
-      );
+      // runner.report.push(
+      //   {
+      //     status: "passed",
+      //     assertions: [{ method: "equal", args: ["res.status", "200"] }],
+      //   },
+      //   {
+      //     status: "passed",
+      //     assertions: [{ method: "equal", args: ["res.status", "200"] }],
+      //   },
+      //   {
+      //     status: "passed",
+      //     assertions: [{ method: "equal", args: ["res.status", "200"] }],
+      //   }
+      // );
       console.log(runner.report.length);
     },
     function (req, res) {

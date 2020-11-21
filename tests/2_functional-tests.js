@@ -76,6 +76,62 @@ suite("Functional Tests", function () {
         });
     });
 
+    test("1", function (done) {
+      chai
+        .request(server)
+        .post("/api/issues/test")
+        .send({
+          issue_title: "Title",
+          issue_text: "text",
+          created_by: "User",
+        })
+        .end(function (err, res) {
+          assert.equal(res.status, 200);
+          assert.equal(res.body.issue_title, "Title");
+          assert.equal(res.body.issue_text, "text");
+          assert.equal(res.body.created_by, "User");
+          assert.isBoolean(res.body.open);
+          done();
+        });
+    });
+
+    test("2", function (done) {
+      chai
+        .request(server)
+        .post("/api/issues/test")
+        .send({
+          issue_title: "Title",
+          issue_text: "text",
+          created_by: "User",
+        })
+        .end(function (err, res) {
+          assert.equal(res.status, 200);
+          assert.equal(res.body.issue_title, "Title");
+          assert.equal(res.body.issue_text, "text");
+          assert.equal(res.body.created_by, "User");
+          assert.isBoolean(res.body.open);
+          done();
+        });
+    });
+
+    test("3", function (done) {
+      chai
+        .request(server)
+        .post("/api/issues/test")
+        .send({
+          issue_title: "Title",
+          issue_text: "text",
+          created_by: "User",
+        })
+        .end(function (err, res) {
+          assert.equal(res.status, 200);
+          assert.equal(res.body.issue_title, "Title");
+          assert.equal(res.body.issue_text, "text");
+          assert.equal(res.body.created_by, "User");
+          assert.isBoolean(res.body.open);
+          done();
+        });
+    });
     test("Missing required fields", function (done) {
       chai
         .request(server)
